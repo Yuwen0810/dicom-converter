@@ -314,6 +314,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 			imgs = pydicom.read_file(source_path).pixel_array
 			self.progressBarOneFile.setMaximum(len(imgs))
 
+			# 2022.06.30: 單幀 dicom 問題修復
+			if np.ndim(imgs) == 3:
+				imgs = imgs[np.newaxis, :]
+
 			if output_ext in ['.png', '.jpg', '.jpeg']:
 				saver = ImageSaveHelper(output_ext, output_path, len(imgs))
 			elif output_ext in ['.mp4', '.avi', '.mov']:
